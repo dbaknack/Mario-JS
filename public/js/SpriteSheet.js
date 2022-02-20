@@ -1,37 +1,45 @@
 export default class SpriteSheet {
-    constructor(image,width,hight) {
-        this.Image = image;
+    constructor(image, width, height) {
+        this.image = image;
         this.width = width;
-        this.hight = hight;
+        this.height = height;
         this.tiles = new Map();
     }
 
-    define(name,x,y){
+    define(name, x, y, width, height) {
         const buffer = document.createElement('canvas');
-        buffer.width = this.width;
-        buffer.hight = this.hight;
-        buffer.getContext('2d');
+        buffer.width = width;
+        buffer.height = height;
         buffer
             .getContext('2d')
             .drawImage(
-                this.Image,
-                x * this.width,
-                y * this.hight,
-                this.width,
-                this.hight,
+                this.image,
+                x,
+                y,
+                width,
+                height,
                 0,
                 0,
-                this.width,
-                this.hight)
-        this.tiles.set(name,buffer);
+                width,
+                height);
+        this.tiles.set(name, buffer)
     }
 
-    draw(name,context,x,y) {
+    defineTile(name, x, y) {
+        this.define(
+            name,
+            x * this.width,
+            y * this.height,
+            this.width,
+            this.height);
+    }
+
+    draw(name, context, x, y) {
         const buffer = this.tiles.get(name);
-        context.drawImage(buffer,x,y);
+        context.drawImage(buffer, x, y);
     }
 
-    drawTile(name,context,x,y) {
-        this.draw(name,context, x * this.width, y * this.hight)
+    drawTile(name, context, x, y) {
+        this.draw(name, context, x * this.width, y * this.height);
     }
 }
